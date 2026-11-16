@@ -1,0 +1,17 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=$(jq -r '.tool_input.file_path // .tool_response.filePath'); case \"$f\" in *.py) ;; *) exit 0;; esac; r=$(command -v ruff || ls \"$CLAUDE_PROJECT_DIR/.venv/bin/ruff\" 2>/dev/null) || exit 0; out=$(cd \"$CLAUDE_PROJECT_DIR\" && \"$r\" check --quiet \"$f\" 2>&1) || { echo \"$out\" >&2; exit 2; }",
+            "timeout": 30,
+            "statusMessage": "ruff check"
+          }
+        ]
+      }
+    ]
+  }
+}
